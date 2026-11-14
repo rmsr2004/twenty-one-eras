@@ -237,6 +237,51 @@ button {
   cursor: default;
 }
 
+.ned::before,
+.ned::after {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.ned::before {
+  content: "Hello, I'm Ned!";
+  bottom: calc(100% + 0.6rem);
+  right: 0;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.75rem;
+  background: var(--text);
+  color: var(--bg);
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.3);
+}
+
+.ned::after {
+  content: "";
+  bottom: calc(100% + 0.6rem - 0.5rem);
+  right: 30%;
+  border: 0.5rem solid transparent;
+  border-top-color: var(--text);
+  border-bottom: 0;
+}
+
+.ned:hover::before,
+.ned:hover::after,
+.ned:focus-visible::before,
+.ned:focus-visible::after {
+  opacity: 1;
+}
+
+.ned[aria-expanded="true"]::before,
+.ned[aria-expanded="true"]::after,
+.ned:disabled::before,
+.ned:disabled::after {
+  display: none;
+}
+
 @keyframes float {
   50% {
     translate: 0 -0.4rem;

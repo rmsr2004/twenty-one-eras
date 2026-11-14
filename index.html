@@ -35,7 +35,14 @@
     </section>
 
     <section class="tracks" aria-labelledby="tracks-title">
-      <h2 id="tracks-title" class="section-title">Tracks <small>30-second previews</small></h2>
+      <div class="tracks-header">
+        <h2 id="tracks-title" class="section-title">
+          <span id="tracks-heading">Tracks</span> <small>30-second previews</small>
+        </h2>
+        <button id="favourites-toggle" class="view-toggle" type="button" aria-pressed="false">
+          ♥ Favourites <span id="favourites-count">0</span>
+        </button>
+      </div>
       <p id="tracks-status" class="status" role="status"></p>
       <ol id="track-list" class="track-list">
       </ol>

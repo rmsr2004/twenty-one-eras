@@ -35,6 +35,7 @@ export async function getTracks(albumId) {
     .map((item) => ({
       id: item.trackId,
       name: item.trackName,
+      album: item.collectionName,
       number: item.trackNumber,
       duration: item.trackTimeMillis,
       preview: item.previewUrl,

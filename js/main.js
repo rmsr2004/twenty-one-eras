@@ -221,7 +221,7 @@ player.onUpdate(({ id, playing, progress }) => {
 });
 
 function setVolume(percent) {
-  player.setVolume(percent / 100);
+  player.setVolume((percent / 100) ** 2);
   volumeValue.textContent = `${percent}%`;
 }
 

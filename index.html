@@ -24,8 +24,13 @@
 
   <main id="main" class="layout">
     <section class="album" aria-labelledby="album-title">
-      <div class="cover">
-        <img id="cover" alt="" width="600" height="600">
+      <div class="cover-wrap">
+        <div class="cover">
+          <img id="cover" alt="" width="600" height="600">
+        </div>
+        <button id="ned" class="ned" type="button" aria-haspopup="dialog" aria-label="Read the story of this album" disabled>
+          <img src="images/ned.png" alt="" width="120" height="120">
+        </button>
       </div>
       <div class="album-info">
         <p id="album-year" class="album-year">—</p>
@@ -59,5 +64,15 @@
   <footer class="site-footer">
     <p>Unofficial fan project for a university assignment. Album data, artwork and previews from the iTunes Search API.</p>
   </footer>
+
+  <dialog id="story" class="story" aria-labelledby="story-title">
+    <p id="story-year" class="album-year"></p>
+    <h2 id="story-title" class="story-title"></h2>
+    <div id="story-text" class="story-text">
+    </div>
+    <form method="dialog">
+      <button class="pill">Close</button>
+    </form>
+  </dialog>
 </body>
 </html>

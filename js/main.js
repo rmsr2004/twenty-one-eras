@@ -11,8 +11,14 @@ const cover = document.querySelector('#cover');
 const albumYear = document.querySelector('#album-year');
 const albumTitle = document.querySelector('#album-title');
 const albumDescription = document.querySelector('#album-description');
+const ned = document.querySelector('#ned');
+const story = document.querySelector('#story');
+const storyYear = document.querySelector('#story-year');
+const storyTitle = document.querySelector('#story-title');
+const storyText = document.querySelector('#story-text');
 
 let eras = [];
+let currentEra = null;
 
 function renderEraButtons() {
   eraList.innerHTML = '';
@@ -41,6 +47,7 @@ function applyTheme(era) {
 
 function selectEra(slug) {
   const era = eras.find((e) => e.slug === slug);
+  currentEra = era;
 
   applyTheme(era);
   if (cover.src !== era.cover) {
@@ -51,6 +58,7 @@ function selectEra(slug) {
   albumYear.textContent = era.year;
   albumTitle.textContent = era.name;
   albumDescription.textContent = era.description;
+  ned.setAttribute('aria-label', `Read the story of ${era.name}`);
 
   for (const button of eraList.querySelectorAll('button')) {
     button.setAttribute('aria-pressed', button.dataset.slug === slug);
@@ -71,6 +79,20 @@ cover.addEventListener('error', () => cover.classList.remove('is-loading'));
 
 player.onUpdate(({ playing }) => vinyl.classList.toggle('is-spinning', playing));
 
+ned.addEventListener('click', () => {
+  storyYear.textContent = currentEra.year;
+  storyTitle.textContent = currentEra.name;
+
+  storyText.innerHTML = '';
+  for (const paragraph of currentEra.story) {
+    const p = document.createElement('p');
+    p.textContent = paragraph;
+    storyText.append(p);
+  }
+
+  story.showModal();
+});
+
 async function init() {
   initVolume();
   statusMessage.textContent = 'Loading albums…';
@@ -87,6 +109,7 @@ async function init() {
 
     renderEraButtons();
     selectEra(eras[eras.length - 1].slug);
+    ned.disabled = false;
     statusMessage.textContent = '';
   } catch (error) {
     console.error(error);

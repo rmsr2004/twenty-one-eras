@@ -12,6 +12,7 @@ Built for the Web Development course (MDM, University of Coimbra).
 - **Vinyl cover** – the album art spins while a preview plays and stops when it pauses.
 - **Track previews** – one shared audio player, so only one track plays at a time, with a progress bar
   and a volume slider (remembered between visits).
+- **Album stories** – click Ned, next to the record, to read a longer story about the current album in a `<dialog>`.
 - **Favourites** – save tracks from any album; they are kept in `localStorage` between visits.
 - **Loading and error states** – API responses are cached in `sessionStorage` to avoid repeated requests.
 - **Accessible and responsive** – mobile-first layout, keyboard support, visible focus, ARIA labels,
@@ -50,5 +51,6 @@ Then open <http://localhost:8000>.
 
 ## Notes
 
+- The album stories are our own summaries, based on facts from Wikipedia.
 - No song lyrics are included, and album artwork is loaded from the API, not stored in this repository.
 - Unofficial fan project, not affiliated with the band or their label.

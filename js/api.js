@@ -19,6 +19,14 @@ async function getJSON(url) {
   return data;
 }
 
+export async function getEras() {
+  const response = await fetch('data/eras.json');
+  if (!response.ok) {
+    throw new Error(`Could not load eras.json (${response.status})`);
+  }
+  return response.json();
+}
+
 export async function getAlbums() {
   const data = await getJSON(`${BASE_URL}/lookup?id=${ARTIST_ID}&entity=album&limit=200`);
   const seenNames = new Set();

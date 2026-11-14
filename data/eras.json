@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1784341970,
+    "slug": "self-titled",
+    "name": "Twenty One Pilots",
+    "year": 2009,
+    "description": "The self-released debut from Columbus, Ohio. Piano-driven, raw and introspective, it's where the story begins.",
+    "colors": { "background": "#f4f1ea", "text": "#141414", "accent": "#7a2fd0" }
+  },
+  {
+    "id": 585128397,
+    "slug": "vessel",
+    "name": "Vessel",
+    "year": 2013,
+    "description": "Their first major-label album. Clean, quiet greys, with the band's grandfathers on the cover.",
+    "colors": { "background": "#e4e7ea", "text": "#1b2230", "accent": "#2f4a6d" }
+  },
+  {
+    "id": 974485462,
+    "slug": "blurryface",
+    "name": "Blurryface",
+    "year": 2015,
+    "description": "Named after a character who stands for insecurity. Red and black, with painted hands and necks.",
+    "colors": { "background": "#0d0d0d", "text": "#f2f2f2", "accent": "#f2392e" }
+  },
+  {
+    "id": 1422828208,
+    "slug": "trench",
+    "name": "Trench",
+    "year": 2018,
+    "description": "A concept album about escaping the walled city of Dema. Yellow tape, vultures and Banditos.",
+    "colors": { "background": "#f4d81c", "text": "#1b1b12", "accent": "#344229" }
+  },
+  {
+    "id": 1561836997,
+    "slug": "scaled-and-icy",
+    "name": "Scaled And Icy",
+    "year": 2021,
+    "description": "Bright and pastel on the surface, written during lockdown. Blue dragons on a pink sky.",
+    "colors": { "background": "#f6b3d0", "text": "#10233a", "accent": "#0f5363" }
+  },
+  {
+    "id": 1733370881,
+    "slug": "clancy",
+    "name": "Clancy",
+    "year": 2024,
+    "description": "The return to Dema's storyline, told from Clancy's point of view. Fire red and yellow.",
+    "colors": { "background": "#a3170f", "text": "#fff6e8", "accent": "#ffd23f" }
+  },
+  {
+    "id": 1827507396,
+    "slug": "breach",
+    "name": "Breach",
+    "year": 2025,
+    "description": "The latest chapter. Dark rooms lit by a red glow, picking up where Clancy left off.",
+    "colors": { "background": "#240a09", "text": "#f6e2dc", "accent": "#ff5a47" }
+  }
+]

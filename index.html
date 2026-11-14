@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>twenty one eras</title>
+  <meta name="description" content="A fan site about twenty one pilots: explore each album as its own era, with cover art, track list and 30-second previews.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <h1 class="logo">twenty one <span>eras</span></h1>
+    <nav aria-label="Albums">
+      <ul id="era-list" class="era-list">
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" class="layout">
+    <section class="album" aria-labelledby="album-title">
+      <div class="cover">
+        <img id="cover" alt="" width="600" height="600">
+      </div>
+      <div class="album-info">
+        <p id="album-year" class="album-year">—</p>
+        <h2 id="album-title" class="album-title">Choose an era</h2>
+        <p id="album-description" class="album-description">
+          Every album is a different world. Pick one to step inside.
+        </p>
+      </div>
+    </section>
+
+    <section class="tracks" aria-labelledby="tracks-title">
+      <h2 id="tracks-title" class="section-title">Tracks</h2>
+      <ol id="track-list" class="track-list">
+      </ol>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Unofficial fan project for a university assignment. Album data, artwork and previews from the iTunes Search API.</p>
+  </footer>
+</body>
+</html>

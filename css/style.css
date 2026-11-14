@@ -1,0 +1,154 @@
+:root {
+  --bg: #111111;
+  --text: #f2f2f2;
+  --accent: #e5e5e5;
+
+  --muted: color-mix(in srgb, var(--text) 65%, var(--bg));
+  --line: color-mix(in srgb, var(--text) 18%, var(--bg));
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --radius: 0.5rem;
+  --gap: 1.5rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font);
+  line-height: 1.5;
+  background: var(--bg);
+  color: var(--text);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+h2 {
+  margin: 0;
+  line-height: 1.05;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  padding: 0.5rem 1rem;
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.site-header {
+  padding: var(--gap) 1rem 0;
+}
+
+.logo {
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.logo span {
+  color: var(--accent);
+}
+
+.era-list {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+  padding: 0 0 0.5rem;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.layout {
+  display: grid;
+  gap: calc(var(--gap) * 2);
+  padding: var(--gap) 1rem;
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.album {
+  display: grid;
+  gap: var(--gap);
+}
+
+.cover {
+  aspect-ratio: 1;
+  max-width: 28rem;
+  border-radius: 50%;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.album-year {
+  margin: 0;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.album-title {
+  font-size: clamp(2.5rem, 10vw, 5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.album-description {
+  max-width: 40ch;
+  color: var(--muted);
+}
+
+.section-title {
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.track-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer {
+  padding: var(--gap) 1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (min-width: 50rem) {
+  .site-header {
+    padding-inline: 2rem;
+  }
+
+  .layout {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    padding-inline: 2rem;
+  }
+
+  .album {
+    position: sticky;
+    top: var(--gap);
+  }
+}

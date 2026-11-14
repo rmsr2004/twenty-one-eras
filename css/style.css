@@ -246,7 +246,7 @@ button {
 }
 
 .ned::before {
-  content: "Hello, I'm Ned!";
+  content: "Hello, I'm Ned!\A Click me to learn more about this era.";
   bottom: calc(100% + 0.6rem);
   right: 0;
   padding: 0.4rem 0.75rem;
@@ -255,7 +255,9 @@ button {
   color: var(--bg);
   font-size: 0.85rem;
   font-weight: 700;
-  white-space: nowrap;
+  line-height: 1.4;
+  text-align: left;
+  white-space: pre;
   box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.3);
 }
 

@@ -47,6 +47,7 @@ function toggleFavourite(track) {
 
 function updateFavouriteButton(button, track) {
   const saved = isFavourite(track);
+  button.textContent = saved ? '♥' : '♡';
   button.setAttribute('aria-pressed', saved);
   button.setAttribute('aria-label', saved
     ? `Remove ${track.name} from favourites`
@@ -168,7 +169,7 @@ function renderTracks() {
         </span>
       </button>
       <span class="track-time">${formatDuration(track.duration)}</span>
-      <button type="button" class="favourite-button">♥</button>
+      <button type="button" class="favourite-button"></button>
     `;
     item.querySelector('.track-name').textContent = track.name;
     item.querySelector('.track-button').setAttribute('aria-label', `Play ${track.name}`);

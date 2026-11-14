@@ -60,7 +60,6 @@ export async function getAlbums() {
       id: item.collectionId,
       name: item.collectionName,
       year: Number(item.releaseDate.slice(0, 4)),
-      trackCount: item.trackCount,
       cover: item.artworkUrl100.replace('100x100', '600x600'),
     }))
     .sort((a, b) => a.year - b.year);

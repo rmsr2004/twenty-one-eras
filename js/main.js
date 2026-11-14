@@ -1,6 +1,7 @@
 import { getAlbums, getEras, getTracks } from './api.js';
 import * as player from './player.js';
 
+const themeColor = document.querySelector('meta[name="theme-color"]');
 const eraList = document.querySelector('#era-list');
 const statusMessage = document.querySelector('#status');
 const vinyl = document.querySelector('.cover');
@@ -75,6 +76,8 @@ function applyTheme(era) {
   document.body.style.setProperty('--bg', era.colors.background);
   document.body.style.setProperty('--text', era.colors.text);
   document.body.style.setProperty('--accent', era.colors.accent);
+  themeColor.content = era.colors.background;
+  document.title = `${era.name} · twenty one eras`;
 }
 
 function selectEra(slug) {
@@ -219,7 +222,7 @@ async function init() {
     eras = eraData
       .map((era) => {
         const album = albums.find((a) => a.id === era.id);
-        return album ? { ...era, cover: album.cover, trackCount: album.trackCount } : null;
+        return album ? { ...era, cover: album.cover } : null;
       })
       .filter(Boolean);
 

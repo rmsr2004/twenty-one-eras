@@ -16,12 +16,6 @@ const trackList = document.querySelector('#track-list');
 const tracksStatus = document.querySelector('#tracks-status');
 const volumeInput = document.querySelector('#volume');
 const volumeValue = document.querySelector('#volume-value');
-const quizOpen = document.querySelector('#quiz-open');
-const quiz = document.querySelector('#quiz');
-const quizForm = document.querySelector('#quiz-form');
-const quizResult = document.querySelector('#quiz-result');
-const quizResultName = document.querySelector('#quiz-result-name');
-const quizResultText = document.querySelector('#quiz-result-text');
 
 let eras = [];
 let currentEra = null;
@@ -238,38 +232,6 @@ volumeInput.addEventListener('input', () => {
   localStorage.setItem('volume', volumeInput.value);
 });
 
-quizOpen.addEventListener('click', () => {
-  quizForm.reset();
-  quizForm.hidden = false;
-  quizResult.hidden = true;
-  quiz.showModal();
-});
-
-quizForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-
-  const answers = [...new FormData(quizForm).values()];
-  const scores = {};
-  for (const slug of answers) {
-    scores[slug] = (scores[slug] ?? 0) + 1;
-  }
-  const winner = answers.reduce((best, slug) => (scores[slug] > scores[best] ? slug : best));
-
-  const era = eras.find((e) => e.slug === winner);
-  selectEra(era.slug);
-  quizResultName.textContent = era.name;
-  quizResultText.textContent = era.description;
-  quizForm.hidden = true;
-  quizResult.hidden = false;
-  quizResult.querySelector('button').focus();
-});
-
-quiz.addEventListener('click', (event) => {
-  if (event.target.closest('[data-close]')) {
-    quiz.close();
-  }
-});
-
 async function init() {
   try {
     volumeInput.value = localStorage.getItem('volume') ?? 80;
@@ -291,7 +253,6 @@ async function init() {
 
     renderEraButtons();
     selectEra(eras[eras.length - 1].slug);
-    quizOpen.disabled = false;
     statusMessage.textContent = '';
   } catch (error) {
     console.error(error);

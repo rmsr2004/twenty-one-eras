@@ -10,8 +10,10 @@ Built for the Web Development course (MDM, University of Coimbra).
 
 - **Era selector** – each studio album has its own colour theme, swapped with CSS variables and smooth transitions.
 - **Vinyl cover** – the album art spins while a preview plays and stops when it pauses.
-- **Track previews** – one shared audio player, so only one track plays at a time, with a progress bar.
+- **Track previews** – one shared audio player, so only one track plays at a time, with a progress bar
+  and a volume slider (remembered between visits).
 - **Favourites** – save tracks from any album; they are kept in `localStorage` between visits.
+- **"Which era are you?" quiz** – four quick questions in a `<dialog>`; the result switches the page to that era.
 - **Loading and error states** – API responses are cached in `sessionStorage` to avoid repeated requests.
 - **Accessible and responsive** – mobile-first layout, keyboard support, visible focus, ARIA labels,
   colour contrast checked for every era, and no animations when the system asks for reduced motion.

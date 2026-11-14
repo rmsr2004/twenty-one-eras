@@ -28,10 +28,23 @@
         <div class="cover">
           <img id="cover" alt="" width="600" height="600">
         </div>
-        <button id="ned" class="ned" type="button" aria-haspopup="dialog" aria-label="Read the story of this album" disabled>
+        <button id="ned" class="ned" type="button" aria-controls="bubble" aria-expanded="false"
+                aria-label="Ask Ned about this album" disabled>
           <img src="images/ned.svg" alt="" width="120" height="144">
         </button>
+
+        <div id="bubble" class="bubble" hidden>
+          <p class="bubble-text" aria-hidden="true">
+            <span id="bubble-full" class="bubble-full"></span>
+            <span id="bubble-typed"></span>
+          </p>
+          <div class="bubble-actions">
+            <button id="bubble-close" class="bubble-button" type="button" aria-label="Close">✕</button>
+            <button id="bubble-next" class="bubble-button bubble-next" type="button" aria-label="Next">▼</button>
+          </div>
+        </div>
       </div>
+      <p id="ned-says" class="visually-hidden" aria-live="polite"></p>
       <div class="album-info">
         <p id="album-year" class="album-year">—</p>
         <h2 id="album-title" class="album-title">Choose an era</h2>
@@ -64,15 +77,5 @@
   <footer class="site-footer">
     <p>Unofficial fan project for a university assignment. Album data, artwork and previews from the iTunes Search API.</p>
   </footer>
-
-  <dialog id="story" class="story" aria-labelledby="story-title">
-    <p id="story-year" class="album-year"></p>
-    <h2 id="story-title" class="story-title"></h2>
-    <div id="story-text" class="story-text">
-    </div>
-    <form method="dialog">
-      <button class="pill">Close</button>
-    </form>
-  </dialog>
 </body>
 </html>

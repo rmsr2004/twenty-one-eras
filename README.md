@@ -12,7 +12,8 @@ Built for the Web Development course (MDM, University of Coimbra).
 - **Vinyl cover** – the album art spins while a preview plays and stops when it pauses.
 - **Track previews** – one shared audio player, so only one track plays at a time, with a progress bar
   and a volume slider (remembered between visits).
-- **Album stories** – click Ned, next to the record, to read a longer story about the current album in a `<dialog>`.
+- **Ned tells the story** – click Ned, next to the record, and he explains what the album means in a speech bubble,
+  typed letter by letter like in a game.
 - **Favourites** – save tracks from any album; they are kept in `localStorage` between visits.
 - **Loading and error states** – API responses are cached in `sessionStorage` to avoid repeated requests.
 - **Accessible and responsive** – mobile-first layout, keyboard support, visible focus, ARIA labels,
@@ -29,9 +30,11 @@ js/main.js       entry point: eras, theme switching and vinyl cover
 js/tracks.js     track list, favourites view and sync with the player
 js/favourites.js favourite tracks saved in localStorage
 js/volume.js     volume slider
+js/ned.js        Ned's speech bubble with the album story
 js/player.js     the shared <audio> player
 js/api.js        requests to the iTunes Search API (albums and tracks)
-data/eras.json   our own content: description and colours of each era
+data/eras.json   our own content: description, colours and story of each era
+images/ned.svg   our own drawing of Ned
 ```
 
 Album data, artwork and previews come from the public
@@ -51,6 +54,6 @@ Then open <http://localhost:8000>.
 
 ## Notes
 
-- The album stories are our own summaries, based on facts from Wikipedia.
+- Ned's stories are our own short summaries of each album's themes, including common fan interpretations.
 - No song lyrics are included, and album artwork is loaded from the API, not stored in this repository.
 - Unofficial fan project, not affiliated with the band or their label.

@@ -16,6 +16,10 @@ export function toggle(track) {
   play();
 }
 
+export function setVolume(value) {
+  audio.volume = value;
+}
+
 export function stop() {
   currentId = null;
   audio.pause();

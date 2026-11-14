@@ -14,6 +14,8 @@ const favouritesToggle = document.querySelector('#favourites-toggle');
 const favouritesCount = document.querySelector('#favourites-count');
 const trackList = document.querySelector('#track-list');
 const tracksStatus = document.querySelector('#tracks-status');
+const volumeInput = document.querySelector('#volume');
+const volumeValue = document.querySelector('#volume-value');
 
 let eras = [];
 let currentEra = null;
@@ -212,7 +214,22 @@ player.onUpdate(({ id, playing, progress }) => {
   }
 });
 
+function setVolume(percent) {
+  player.setVolume(percent / 100);
+  volumeValue.textContent = `${percent}%`;
+}
+
+volumeInput.addEventListener('input', () => {
+  setVolume(volumeInput.value);
+  localStorage.setItem('volume', volumeInput.value);
+});
+
 async function init() {
+  try {
+    volumeInput.value = localStorage.getItem('volume') ?? 80;
+  } catch {
+  }
+  setVolume(volumeInput.value);
   favouritesCount.textContent = favourites.length;
   statusMessage.textContent = 'Loading albums…';
 

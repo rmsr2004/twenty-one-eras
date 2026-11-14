@@ -24,9 +24,12 @@ Plain HTML, CSS and JavaScript (ES modules). No libraries, no frameworks and no 
 ```
 index.html       page structure
 css/style.css    layout, themes and animations
-js/api.js        requests to the iTunes Search API (albums and tracks)
+js/main.js       entry point: eras, theme switching and vinyl cover
+js/tracks.js     track list, favourites view and sync with the player
+js/favourites.js favourite tracks saved in localStorage
+js/volume.js     volume slider
 js/player.js     the shared <audio> player
-js/main.js       interface: eras, themes, track list and favourites
+js/api.js        requests to the iTunes Search API (albums and tracks)
 data/eras.json   our own content: description and colours of each era
 ```
 

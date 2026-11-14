@@ -27,6 +27,21 @@ export async function getEras() {
   return response.json();
 }
 
+export async function getTracks(albumId) {
+  const data = await getJSON(`${BASE_URL}/lookup?id=${albumId}&entity=song`);
+
+  return data.results
+    .filter((item) => item.wrapperType === 'track' && item.previewUrl)
+    .map((item) => ({
+      id: item.trackId,
+      name: item.trackName,
+      number: item.trackNumber,
+      duration: item.trackTimeMillis,
+      preview: item.previewUrl,
+    }))
+    .sort((a, b) => a.number - b.number);
+}
+
 export async function getAlbums() {
   const data = await getJSON(`${BASE_URL}/lookup?id=${ARTIST_ID}&entity=album&limit=200`);
   const seenNames = new Set();

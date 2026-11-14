@@ -14,7 +14,10 @@
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
-    <h1 class="logo">twenty one <span>eras</span></h1>
+    <div class="header-top">
+      <h1 class="logo">twenty one <span>eras</span></h1>
+      <button id="quiz-open" class="pill" type="button" disabled>Which era are you?</button>
+    </div>
     <nav aria-label="Album eras">
       <ul id="era-list" class="era-list">
       </ul>
@@ -59,5 +62,55 @@
   <footer class="site-footer">
     <p>Unofficial fan project for a university assignment. Album data, artwork and previews from the iTunes Search API.</p>
   </footer>
+
+  <dialog id="quiz" class="quiz" aria-labelledby="quiz-title">
+    <form id="quiz-form">
+      <h2 id="quiz-title" class="quiz-title">Which era are you?</h2>
+
+      <fieldset>
+        <legend>Pick a colour palette</legend>
+        <label><input type="radio" name="colour" value="blurryface" required> Black and red</label>
+        <label><input type="radio" name="colour" value="trench"> Yellow and olive green</label>
+        <label><input type="radio" name="colour" value="scaled-and-icy"> Pastel pink and blue</label>
+        <label><input type="radio" name="colour" value="self-titled"> White with a splash of neon</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Where would you spend the night?</legend>
+        <label><input type="radio" name="place" value="vessel" required> A quiet house in the suburbs</label>
+        <label><input type="radio" name="place" value="breach"> A dark room lit by a red glow</label>
+        <label><input type="radio" name="place" value="clancy"> A field on fire at sunset</label>
+        <label><input type="radio" name="place" value="trench"> Outside the walls of a strange city</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>How are you feeling today?</legend>
+        <label><input type="radio" name="mood" value="blurryface" required> Anxious, but hiding it well</label>
+        <label><input type="radio" name="mood" value="scaled-and-icy"> Smiling on the outside</label>
+        <label><input type="radio" name="mood" value="clancy"> Restless and ready to fight</label>
+        <label><input type="radio" name="mood" value="self-titled"> Thoughtful, alone at a piano</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Pick a symbol</legend>
+        <label><input type="radio" name="symbol" value="vessel" required> An old family photo</label>
+        <label><input type="radio" name="symbol" value="breach"> A light in the dark</label>
+        <label><input type="radio" name="symbol" value="scaled-and-icy"> A dragon</label>
+        <label><input type="radio" name="symbol" value="clancy"> A flame</label>
+      </fieldset>
+
+      <div class="quiz-actions">
+        <button type="button" class="pill" data-close>Cancel</button>
+        <button type="submit" class="pill pill-primary">See my era</button>
+      </div>
+    </form>
+
+    <div id="quiz-result" class="quiz-result" hidden>
+      <p class="album-year">Your era is</p>
+      <p id="quiz-result-name" class="quiz-title"></p>
+      <p id="quiz-result-text" class="album-description"></p>
+      <button type="button" class="pill pill-primary" data-close>Enter the era</button>
+    </div>
+  </dialog>
 </body>
 </html>

@@ -29,6 +29,10 @@ function play() {
   audio.play().catch((error) => console.warn('Preview could not play:', error.message));
 }
 
+export function onEnded(callback) {
+  audio.addEventListener('ended', () => callback(currentId));
+}
+
 export function onUpdate(callback) {
   for (const type of ['play', 'pause', 'ended', 'timeupdate']) {
     audio.addEventListener(type, () => {

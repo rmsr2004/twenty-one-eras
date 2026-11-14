@@ -220,6 +220,14 @@ player.onUpdate(({ id, playing, progress }) => {
   }
 });
 
+player.onEnded((id) => {
+  const index = tracks.findIndex((t) => t.id === id);
+  const next = tracks[index + 1];
+  if (index !== -1 && next) {
+    player.toggle(next);
+  }
+});
+
 function setVolume(percent) {
   player.setVolume((percent / 100) ** 2);
   volumeValue.textContent = `${percent}%`;

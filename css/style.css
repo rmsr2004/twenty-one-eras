@@ -9,6 +9,7 @@ body {
   --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --radius: 0.5rem;
   --gap: 1.5rem;
+  --fade: 0.6s ease;
 }
 
 *,
@@ -24,7 +25,21 @@ body {
   line-height: 1.5;
   background: var(--bg);
   color: var(--text);
-  transition: background-color 0.6s ease, color 0.6s ease;
+  transition: background-color var(--fade), color var(--fade);
+}
+
+.logo span,
+.era-button,
+.status,
+.album-year,
+.album-description,
+.section-title,
+.track,
+.track-icon,
+.track-name,
+.track-time,
+.site-footer {
+  transition: color var(--fade), background-color var(--fade), border-color var(--fade);
 }
 
 img {
@@ -126,11 +141,54 @@ h2 {
 }
 
 .cover {
+  position: relative;
   aspect-ratio: 1;
   max-width: 28rem;
   border-radius: 50%;
   background: var(--line);
   overflow: hidden;
+  box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.35);
+  animation: spin 12s linear infinite;
+  animation-play-state: paused;
+}
+
+.cover.is-spinning {
+  animation-play-state: running;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.cover img {
+  transition: opacity 0.4s ease;
+}
+
+.cover img.is-loading {
+  opacity: 0;
+}
+
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-radial-gradient(circle, transparent 0 3px, rgb(0 0 0 / 0.07) 3px 4px);
+}
+
+.cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 12%;
+  height: 12%;
+  margin: auto;
+  border-radius: 50%;
+  background: var(--bg);
+  box-shadow: 0 0 0 0.5rem rgb(0 0 0 / 0.25);
+  transition: background-color var(--fade);
 }
 
 .album-year {
@@ -180,6 +238,8 @@ h2 {
   align-items: center;
   gap: 1rem;
   border-bottom: 1px solid var(--line);
+  animation: slide-in 0.4s ease both;
+  animation-delay: calc(var(--i, 0) * 40ms);
 }
 
 .track::after {
@@ -192,7 +252,14 @@ h2 {
   background: var(--accent);
   transform: scaleX(var(--progress, 0));
   transform-origin: left;
-  transition: transform 0.25s linear;
+  transition: transform 0.25s linear, background-color var(--fade);
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
 }
 
 .track-button {

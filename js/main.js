@@ -3,6 +3,7 @@ import * as player from './player.js';
 
 const eraList = document.querySelector('#era-list');
 const statusMessage = document.querySelector('#status');
+const vinyl = document.querySelector('.cover');
 const cover = document.querySelector('#cover');
 const albumYear = document.querySelector('#album-year');
 const albumTitle = document.querySelector('#album-title');
@@ -42,7 +43,10 @@ function selectEra(slug) {
   currentEra = era;
 
   applyTheme(era);
-  cover.src = era.cover;
+  if (cover.src !== era.cover) {
+    cover.classList.add('is-loading');
+    cover.src = era.cover;
+  }
   cover.alt = `Album cover of ${era.name}`;
   albumYear.textContent = era.year;
   albumTitle.textContent = era.name;
@@ -55,6 +59,9 @@ function selectEra(slug) {
   player.stop();
   loadTracks(era);
 }
+
+cover.addEventListener('load', () => cover.classList.remove('is-loading'));
+cover.addEventListener('error', () => cover.classList.remove('is-loading'));
 
 eraList.addEventListener('click', (event) => {
   const button = event.target.closest('button');
@@ -91,10 +98,11 @@ async function loadTracks(era) {
 function renderTracks() {
   trackList.innerHTML = '';
 
-  for (const track of tracks) {
+  for (const [index, track] of tracks.entries()) {
     const item = document.createElement('li');
     item.className = 'track';
     item.dataset.id = track.id;
+    item.style.setProperty('--i', index);
     item.innerHTML = `
       <button type="button" class="track-button">
         <span class="track-icon" aria-hidden="true">${track.number}</span>
@@ -117,6 +125,8 @@ trackList.addEventListener('click', (event) => {
 });
 
 player.onUpdate(({ id, playing, progress }) => {
+  vinyl.classList.toggle('is-spinning', playing);
+
   for (const item of trackList.children) {
     const track = tracks.find((t) => String(t.id) === item.dataset.id);
     const isCurrent = track.id === id;

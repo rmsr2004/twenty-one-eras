@@ -117,12 +117,6 @@ button {
   color: var(--bg);
 }
 
-.site-header,
-.layout {
-  max-width: 72rem;
-  margin-inline: auto;
-}
-
 .site-header {
   padding: var(--gap) 1rem 0;
 }
@@ -384,15 +378,15 @@ button {
 }
 
 @media (min-width: 50rem) {
-  .site-header {
-    padding-inline: 2rem;
+  .site-header,
+  .layout {
+    padding-inline: clamp(2rem, 4vw, 5rem);
   }
 
   .layout {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 50vh) minmax(0, 1fr);
     align-items: start;
-    gap: 3rem;
-    padding-inline: 2rem;
+    gap: clamp(3rem, 5vw, 6rem);
   }
 
   .album {
@@ -403,11 +397,11 @@ button {
   }
 
   .cover {
-    width: min(100%, 28rem, 55vh);
+    width: 100%;
   }
 
   .album-title {
-    font-size: clamp(2.25rem, 5.5vw, 4.5rem);
+    font-size: clamp(2.25rem, 5vw, 6rem);
   }
 
   .album-description {

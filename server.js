@@ -61,3 +61,7 @@ async function handleRequest(request, response) {
 http.createServer(handleRequest).listen(PORT, HOST, () => {
   console.log(`twenty one eras running at http://localhost:${PORT}`);
 });
+
+for (const stopSignal of ['SIGINT', 'SIGTERM']) {
+  process.on(stopSignal, () => process.exit(0));
+}

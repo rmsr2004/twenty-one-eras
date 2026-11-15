@@ -24,7 +24,7 @@ Built for the Web Development course (MDM, University of Coimbra).
 Plain HTML, CSS and JavaScript (ES modules). No libraries, no frameworks and no build step.
 
 ```
-index.html       page structure
+index.html       page structure, including our SVG drawing of Ned
 server.js        local development server (Node.js, no dependencies)
 Dockerfile       container image that runs server.js (plus docker-compose.yml)
 css/style.css    layout, themes and animations
@@ -36,7 +36,6 @@ js/ned.js        Ned's speech bubble with the album story
 js/player.js     the shared <audio> player
 js/api.js        requests to the iTunes Search API (albums and tracks)
 data/eras.json   our own content: description, colours and story of each era
-images/ned.svg   our own drawing of Ned
 ```
 
 Album data, artwork and previews come from the public

@@ -241,10 +241,33 @@ button {
   }
 }
 
-.ned img {
+.ned-drawing {
+  display: block;
   width: 100%;
   height: auto;
+  overflow: visible;
   filter: drop-shadow(0 0.5rem 0.75rem rgb(0 0 0 / 0.35));
+}
+
+.ned-open-mouth {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center top;
+}
+
+.ned.is-talking .ned-closed-mouth {
+  opacity: 0;
+}
+
+.ned.is-talking .ned-open-mouth {
+  opacity: 1;
+  animation: talk 0.16s ease-in-out infinite alternate;
+}
+
+@keyframes talk {
+  from {
+    transform: scaleY(0.2);
+  }
 }
 
 .ned:hover {

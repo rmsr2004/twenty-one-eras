@@ -50,6 +50,7 @@ function closeBubble() {
 function stopTyping() {
   clearInterval(typingTimer);
   typingTimer = null;
+  ned.classList.remove('is-talking');
 }
 
 function showLine() {
@@ -71,6 +72,7 @@ function showLine() {
 function typeLine(line) {
   let typedLetters = 0;
   bubbleTypedText.textContent = '';
+  ned.classList.add('is-talking');
 
   typingTimer = setInterval(() => {
     typedLetters++;

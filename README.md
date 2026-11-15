@@ -25,6 +25,7 @@ Plain HTML, CSS and JavaScript (ES modules). No libraries, no frameworks and no 
 
 ```
 index.html       page structure
+server.js        local development server (Node.js, no dependencies)
 css/style.css    layout, themes and animations
 js/main.js       entry point: eras, theme switching and vinyl cover
 js/tracks.js     track list, favourites view and sync with the player
@@ -44,13 +45,15 @@ To change an era's description or colours, edit `data/eras.json`.
 
 ## Run locally
 
-ES modules and `fetch` need a local server (opening the file directly won't work):
+ES modules and `fetch` need a local server (opening the file directly won't work).
+The project includes a small Node.js server with no dependencies:
 
 ```bash
-python3 -m http.server
+node server.js
 ```
 
-Then open <http://localhost:8000>.
+Then open <http://localhost:8000>. Use another port with `PORT=3000 node server.js`.
+The server is only for local testing; GitHub Pages serves the published site.
 
 ## Notes
 

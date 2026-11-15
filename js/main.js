@@ -40,6 +40,12 @@ function applyTheme(era) {
   document.title = `${era.name} · twenty one eras`;
 }
 
+function resetVinylRotation() {
+  for (const animation of vinyl.getAnimations()) {
+    animation.currentTime = 0;
+  }
+}
+
 function showCover(era) {
   if (coverImage.src !== era.cover) {
     coverImage.classList.add('is-loading');
@@ -64,6 +70,7 @@ function selectEra(slug) {
   const era = eras.find((e) => e.slug === slug);
 
   applyTheme(era);
+  resetVinylRotation();
   showCover(era);
   showAlbumInfo(era);
   markSelectedEraButton(slug);

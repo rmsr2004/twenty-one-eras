@@ -26,6 +26,7 @@ Plain HTML, CSS and JavaScript (ES modules). No libraries, no frameworks and no 
 ```
 index.html       page structure
 server.js        local development server (Node.js, no dependencies)
+Dockerfile       container image that runs server.js (plus docker-compose.yml)
 css/style.css    layout, themes and animations
 js/main.js       entry point: eras, theme switching and vinyl cover
 js/tracks.js     track list, favourites view and sync with the player
@@ -54,6 +55,15 @@ node server.js
 
 Then open <http://localhost:8000>. Use another port with `PORT=3000 node server.js`.
 The server is only for local testing; GitHub Pages serves the published site.
+
+### With Docker
+
+```bash
+docker compose up --build
+```
+
+Then open <http://localhost:8000>, and stop it with `Ctrl+C` (or `docker compose down`).
+Without Compose: `docker build -t twenty-one-eras .` and `docker run --rm -p 8000:8000 twenty-one-eras`.
 
 ## Notes
 

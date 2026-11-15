@@ -1,27 +1,24 @@
 const audio = new Audio();
-let currentId = null;
+let currentTrackId = null;
 
 function toggle(track) {
-  if (track.id === currentId) {
-    if (audio.paused) {
-      play();
-    } else {
-      audio.pause();
-    }
-    return;
+  if (track.id !== currentTrackId) {
+    currentTrackId = track.id;
+    audio.src = track.preview;
+    play();
+  } else if (audio.paused) {
+    play();
+  } else {
+    audio.pause();
   }
-
-  currentId = track.id;
-  audio.src = track.preview;
-  play();
 }
 
-function setVolume(value) {
-  audio.volume = value;
+function setVolume(levelFromZeroToOne) {
+  audio.volume = levelFromZeroToOne;
 }
 
 function stop() {
-  currentId = null;
+  currentTrackId = null;
   audio.pause();
 }
 
@@ -29,17 +26,24 @@ function play() {
   audio.play().catch((error) => console.warn('Preview could not play:', error.message));
 }
 
+function currentProgress() {
+  if (audio.ended || !audio.duration) {
+    return 0;
+  }
+  return audio.currentTime / audio.duration;
+}
+
 function onEnded(callback) {
-  audio.addEventListener('ended', () => callback(currentId));
+  audio.addEventListener('ended', () => callback(currentTrackId));
 }
 
 function onUpdate(callback) {
-  for (const type of ['play', 'pause', 'ended', 'timeupdate']) {
-    audio.addEventListener(type, () => {
+  for (const eventType of ['play', 'pause', 'ended', 'timeupdate']) {
+    audio.addEventListener(eventType, () => {
       callback({
-        id: currentId,
+        id: currentTrackId,
         playing: !audio.paused,
-        progress: audio.ended || !audio.duration ? 0 : audio.currentTime / audio.duration,
+        progress: currentProgress(),
       });
     });
   }

@@ -2,61 +2,86 @@ import { getTracks } from './api.js';
 import * as player from './player.js';
 import { getFavourites, isFavourite, toggleFavourite } from './favourites.js';
 
+const PAUSE_ICON = '❚❚';
+const NO_FAVOURITES_MESSAGE = 'No favourites yet. Press ♥ on any track to save it here.';
+
 const tracksHeading = document.querySelector('#tracks-heading');
 const favouritesToggle = document.querySelector('#favourites-toggle');
 const favouritesCount = document.querySelector('#favourites-count');
 const trackList = document.querySelector('#track-list');
 const tracksStatus = document.querySelector('#tracks-status');
+const trackRowTemplate = document.querySelector('#track-row-template');
 
 let currentEra = null;
-let tracks = [];
+let visibleTracks = [];
 let showingFavourites = false;
 
 favouritesCount.textContent = getFavourites().length;
 
 function showAlbum(era) {
   currentEra = era;
-  showList(false);
+  showAlbumTracks();
 }
 
-function showList(favouritesView) {
-  showingFavourites = favouritesView;
-  favouritesToggle.setAttribute('aria-pressed', favouritesView);
-  tracksHeading.textContent = favouritesView ? 'Favourites' : 'Tracks';
+function updateViewHeader() {
+  favouritesToggle.setAttribute('aria-pressed', showingFavourites);
+  tracksHeading.textContent = showingFavourites ? 'Favourites' : 'Tracks';
+}
+
+function showAlbumTracks() {
+  showingFavourites = false;
+  updateViewHeader();
   player.stop();
 
-  if (favouritesView) {
-    tracks = getFavourites();
-    renderTracks();
-  } else if (currentEra) {
+  if (currentEra) {
     loadTracks(currentEra);
   }
 }
 
-favouritesToggle.addEventListener('click', () => showList(!showingFavourites));
+function showFavourites() {
+  showingFavourites = true;
+  updateViewHeader();
+  player.stop();
+
+  visibleTracks = getFavourites();
+  renderTracks();
+}
+
+favouritesToggle.addEventListener('click', () => {
+  if (showingFavourites) {
+    showAlbumTracks();
+  } else {
+    showFavourites();
+  }
+});
+
+function isAlbumStillShown(era) {
+  return era === currentEra && !showingFavourites;
+}
 
 async function loadTracks(era) {
-  trackList.innerHTML = '';
+  trackList.replaceChildren();
   tracksStatus.textContent = 'Loading tracks…';
 
   try {
-    const result = await getTracks(era.id);
-
-    if (era !== currentEra || showingFavourites) return;
-
-    tracks = result;
-    renderTracks();
+    const tracks = await getTracks(era.id);
+    if (isAlbumStillShown(era)) {
+      visibleTracks = tracks;
+      renderTracks();
+    }
   } catch (error) {
     console.error(error);
-    if (era === currentEra && !showingFavourites) {
+    if (isAlbumStillShown(era)) {
       tracksStatus.textContent = 'Could not load the tracks. Try again later.';
     }
   }
 }
 
-function formatDuration(ms) {
-  const seconds = Math.round(ms / 1000);
-  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+function formatDuration(milliseconds) {
+  const totalSeconds = Math.round(milliseconds / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = String(totalSeconds % 60).padStart(2, '0');
+  return `${minutes}:${seconds}`;
 }
 
 function updateFavouriteButton(button, track) {
@@ -68,72 +93,72 @@ function updateFavouriteButton(button, track) {
     : `Add ${track.name} to favourites`);
 }
 
-function renderTracks() {
-  trackList.innerHTML = '';
-  tracksStatus.textContent = tracks.length === 0 && showingFavourites
-    ? 'No favourites yet. Press ♥ on any track to save it here.'
-    : '';
+function createTrackRow(track, index) {
+  const row = trackRowTemplate.content.firstElementChild.cloneNode(true);
+  const position = index + 1;
 
-  for (const [index, track] of tracks.entries()) {
-    const item = document.createElement('li');
-    item.className = 'track';
-    item.dataset.id = track.id;
-    item.dataset.number = index + 1;
-    item.style.setProperty('--i', index);
-    item.innerHTML = `
-      <button type="button" class="track-button">
-        <span class="track-icon" aria-hidden="true">${index + 1}</span>
-        <span>
-          <span class="track-name"></span>
-          <span class="track-album"></span>
-        </span>
-      </button>
-      <span class="track-time">${formatDuration(track.duration)}</span>
-      <button type="button" class="favourite-button"></button>
-    `;
-    item.querySelector('.track-name').textContent = track.name;
-    item.querySelector('.track-button').setAttribute('aria-label', `Play ${track.name}`);
-    if (showingFavourites) {
-      item.querySelector('.track-album').textContent = track.album;
-    }
-    updateFavouriteButton(item.querySelector('.favourite-button'), track);
-    trackList.append(item);
+  row.dataset.id = track.id;
+  row.dataset.position = position;
+  row.style.setProperty('--row-index', index);
+  row.querySelector('.track-icon').textContent = position;
+  row.querySelector('.track-name').textContent = track.name;
+  row.querySelector('.track-time').textContent = formatDuration(track.duration);
+  row.querySelector('.track-button').setAttribute('aria-label', `Play ${track.name}`);
+  if (showingFavourites) {
+    row.querySelector('.track-album').textContent = track.album;
   }
+  updateFavouriteButton(row.querySelector('.favourite-button'), track);
+
+  return row;
+}
+
+function renderTracks() {
+  trackList.replaceChildren(...visibleTracks.map(createTrackRow));
+  tracksStatus.textContent = showingFavourites && visibleTracks.length === 0 ? NO_FAVOURITES_MESSAGE : '';
+}
+
+function trackOfRow(row) {
+  return visibleTracks.find((track) => String(track.id) === row.dataset.id);
 }
 
 trackList.addEventListener('click', (event) => {
-  const item = event.target.closest('.track');
-  if (!item) return;
-  const track = tracks.find((t) => String(t.id) === item.dataset.id);
+  const row = event.target.closest('.track');
+  if (!row) {
+    return;
+  }
+  const track = trackOfRow(row);
 
   if (event.target.closest('.favourite-button')) {
     toggleFavourite(track);
-    updateFavouriteButton(item.querySelector('.favourite-button'), track);
+    updateFavouriteButton(row.querySelector('.favourite-button'), track);
     favouritesCount.textContent = getFavourites().length;
   } else if (event.target.closest('.track-button')) {
     player.toggle(track);
   }
 });
 
-player.onUpdate(({ id, playing, progress }) => {
-  for (const item of trackList.children) {
-    const track = tracks.find((t) => String(t.id) === item.dataset.id);
+function syncRowsWithPlayer({ id, playing, progress }) {
+  for (const row of trackList.children) {
+    const track = trackOfRow(row);
     const isCurrent = track.id === id;
     const isPlaying = isCurrent && playing;
 
-    item.classList.toggle('is-current', isCurrent);
-    item.style.setProperty('--progress', isCurrent ? progress : 0);
-    item.querySelector('.track-icon').textContent = isPlaying ? '❚❚' : item.dataset.number;
-    item.querySelector('.track-button').setAttribute('aria-label', `${isPlaying ? 'Pause' : 'Play'} ${track.name}`);
+    row.classList.toggle('is-current', isCurrent);
+    row.style.setProperty('--progress', isCurrent ? progress : 0);
+    row.querySelector('.track-icon').textContent = isPlaying ? PAUSE_ICON : row.dataset.position;
+    row.querySelector('.track-button').setAttribute('aria-label', `${isPlaying ? 'Pause' : 'Play'} ${track.name}`);
   }
-});
+}
 
-player.onEnded((id) => {
-  const index = tracks.findIndex((t) => t.id === id);
-  const next = tracks[index + 1];
-  if (index !== -1 && next) {
-    player.toggle(next);
+function playNextTrack(finishedTrackId) {
+  const finishedIndex = visibleTracks.findIndex((track) => track.id === finishedTrackId);
+  const nextTrack = visibleTracks[finishedIndex + 1];
+  if (finishedIndex !== -1 && nextTrack) {
+    player.toggle(nextTrack);
   }
-});
+}
+
+player.onUpdate(syncRowsWithPlayer);
+player.onEnded(playNextTrack);
 
 export { showAlbum };

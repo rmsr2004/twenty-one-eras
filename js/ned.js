@@ -1,22 +1,30 @@
+const MS_PER_LETTER = 30;
+
 const ned = document.querySelector('#ned');
 const bubble = document.querySelector('#bubble');
-const bubbleFull = document.querySelector('#bubble-full');
-const bubbleTyped = document.querySelector('#bubble-typed');
+const bubbleSpaceHolder = document.querySelector('#bubble-space-holder');
+const bubbleTypedText = document.querySelector('#bubble-typed-text');
 const nextButton = document.querySelector('#bubble-next');
-const nedSays = document.querySelector('#ned-says');
+const lineForScreenReaders = document.querySelector('#ned-line-for-screen-readers');
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-const TYPING_SPEED = 30;
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-let lines = [];
+let storyLines = [];
 let lineIndex = 0;
 let typingTimer = null;
 
 function setNedEra(era) {
   closeBubble();
-  lines = era.story;
+  storyLines = era.story;
   ned.setAttribute('aria-label', `Ask Ned about ${era.name}`);
   ned.disabled = false;
+}
+
+function isTyping() {
+  return typingTimer !== null;
+}
+
+function isLastLine() {
+  return lineIndex === storyLines.length - 1;
 }
 
 function openBubble() {
@@ -26,11 +34,15 @@ function openBubble() {
   showLine();
 }
 
-function closeBubble() {
-  stopTyping();
+function moveFocusOutOfBubble() {
   if (bubble.contains(document.activeElement)) {
     ned.focus();
   }
+}
+
+function closeBubble() {
+  stopTyping();
+  moveFocusOutOfBubble();
   bubble.hidden = true;
   ned.setAttribute('aria-expanded', false);
 }
@@ -41,45 +53,48 @@ function stopTyping() {
 }
 
 function showLine() {
-  const line = lines[lineIndex];
-  const isLast = lineIndex === lines.length - 1;
+  const line = storyLines[lineIndex];
 
-  bubbleFull.textContent = line;
-  nedSays.textContent = line;
-  nextButton.setAttribute('aria-label', isLast ? 'Close' : 'Next');
-  bubble.classList.remove('is-done');
+  bubbleSpaceHolder.textContent = line;
+  lineForScreenReaders.textContent = line;
+  nextButton.setAttribute('aria-label', isLastLine() ? 'Close' : 'Next');
+  bubble.classList.remove('is-line-complete');
   stopTyping();
 
-  if (reducedMotion.matches) {
-    finishLine();
-    return;
+  if (prefersReducedMotion.matches) {
+    completeLine();
+  } else {
+    typeLine(line);
   }
+}
 
-  let letters = 0;
-  bubbleTyped.textContent = '';
+function typeLine(line) {
+  let typedLetters = 0;
+  bubbleTypedText.textContent = '';
+
   typingTimer = setInterval(() => {
-    letters++;
-    bubbleTyped.textContent = line.slice(0, letters);
-    if (letters === line.length) {
-      finishLine();
+    typedLetters++;
+    bubbleTypedText.textContent = line.slice(0, typedLetters);
+    if (typedLetters === line.length) {
+      completeLine();
     }
-  }, TYPING_SPEED);
+  }, MS_PER_LETTER);
 }
 
-function finishLine() {
+function completeLine() {
   stopTyping();
-  bubbleTyped.textContent = lines[lineIndex];
-  bubble.classList.add('is-done');
+  bubbleTypedText.textContent = storyLines[lineIndex];
+  bubble.classList.add('is-line-complete');
 }
 
-function advance() {
-  if (typingTimer) {
-    finishLine();
-  } else if (lineIndex < lines.length - 1) {
+function advanceStory() {
+  if (isTyping()) {
+    completeLine();
+  } else if (isLastLine()) {
+    closeBubble();
+  } else {
     lineIndex++;
     showLine();
-  } else {
-    closeBubble();
   }
 }
 
@@ -87,7 +102,7 @@ ned.addEventListener('click', () => {
   if (bubble.hidden) {
     openBubble();
   } else {
-    advance();
+    advanceStory();
   }
 });
 
@@ -95,7 +110,7 @@ bubble.addEventListener('click', (event) => {
   if (event.target.closest('#bubble-close')) {
     closeBubble();
   } else {
-    advance();
+    advanceStory();
   }
 });
 

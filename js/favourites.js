@@ -1,6 +1,6 @@
 const STORAGE_KEY = 'favourites';
 
-function load() {
+function loadSavedFavourites() {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? [];
   } catch {
@@ -8,19 +8,19 @@ function load() {
   }
 }
 
-let favourites = load();
+let favourites = loadSavedFavourites();
 
 function getFavourites() {
   return [...favourites];
 }
 
 function isFavourite(track) {
-  return favourites.some((f) => f.id === track.id);
+  return favourites.some((favourite) => favourite.id === track.id);
 }
 
 function toggleFavourite(track) {
   if (isFavourite(track)) {
-    favourites = favourites.filter((f) => f.id !== track.id);
+    favourites = favourites.filter((favourite) => favourite.id !== track.id);
   } else {
     favourites.push(track);
   }

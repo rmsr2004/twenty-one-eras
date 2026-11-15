@@ -1,9 +1,9 @@
-const BASE_URL = 'https://itunes.apple.com';
-const ARTIST_ID = 349736311;
+const ITUNES_URL = 'https://itunes.apple.com';
+const TWENTY_ONE_PILOTS_ARTIST_ID = 349736311;
+const MIN_STUDIO_ALBUM_TRACKS = 8;
+const NOT_A_STUDIO_ALBUM = /\b(single|ep|live|livestream|unplugged)\b/i;
 
-const NOT_STUDIO_ALBUM = /\b(single|ep|live|livestream|unplugged)\b/i;
-
-async function getJSON(url) {
+async function fetchJSONOncePerSession(url) {
   const cached = sessionStorage.getItem(url);
   if (cached) {
     return JSON.parse(cached);
@@ -27,11 +27,15 @@ async function getEras() {
   return response.json();
 }
 
+function isTrackWithPreview(item) {
+  return item.wrapperType === 'track' && Boolean(item.previewUrl);
+}
+
 async function getTracks(albumId) {
-  const data = await getJSON(`${BASE_URL}/lookup?id=${albumId}&entity=song`);
+  const data = await fetchJSONOncePerSession(`${ITUNES_URL}/lookup?id=${albumId}&entity=song`);
 
   return data.results
-    .filter((item) => item.wrapperType === 'track' && item.previewUrl)
+    .filter(isTrackWithPreview)
     .map((item) => ({
       id: item.trackId,
       name: item.trackName,
@@ -43,24 +47,40 @@ async function getTracks(albumId) {
     .sort((a, b) => a.number - b.number);
 }
 
-async function getAlbums() {
-  const data = await getJSON(`${BASE_URL}/lookup?id=${ARTIST_ID}&entity=album&limit=200`);
+function isStudioAlbum(item) {
+  return item.collectionType === 'Album'
+    && item.trackCount >= MIN_STUDIO_ALBUM_TRACKS
+    && !NOT_A_STUDIO_ALBUM.test(item.collectionName);
+}
+
+function uniqueByName(albums) {
   const seenNames = new Set();
 
-  return data.results
-    .filter((item) => item.collectionType === 'Album')
-    .filter((item) => item.trackCount >= 8 && !NOT_STUDIO_ALBUM.test(item.collectionName))
-    .filter((item) => {
-      const name = item.collectionName.toLowerCase();
-      if (seenNames.has(name)) return false;
-      seenNames.add(name);
-      return true;
-    })
+  return albums.filter((album) => {
+    const name = album.collectionName.toLowerCase();
+    if (seenNames.has(name)) {
+      return false;
+    }
+    seenNames.add(name);
+    return true;
+  });
+}
+
+function largeArtwork(artworkUrl100) {
+  return artworkUrl100.replace('100x100', '600x600');
+}
+
+async function getAlbums() {
+  const data = await fetchJSONOncePerSession(
+    `${ITUNES_URL}/lookup?id=${TWENTY_ONE_PILOTS_ARTIST_ID}&entity=album&limit=200`,
+  );
+
+  return uniqueByName(data.results.filter(isStudioAlbum))
     .map((item) => ({
       id: item.collectionId,
       name: item.collectionName,
       year: Number(item.releaseDate.slice(0, 4)),
-      cover: item.artworkUrl100.replace('100x100', '600x600'),
+      cover: largeArtwork(item.artworkUrl100),
     }))
     .sort((a, b) => a.year - b.year);
 }

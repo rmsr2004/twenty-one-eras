@@ -16,27 +16,30 @@
   <header class="site-header">
     <h1 class="logo">twenty one <span>eras</span></h1>
     <nav aria-label="Album eras">
-      <ul id="era-list" class="era-list">
-      </ul>
+      <ul id="era-list" class="era-list"></ul>
     </nav>
     <p id="status" class="status" role="status"></p>
   </header>
 
   <main id="main" class="layout">
     <section class="album" aria-labelledby="album-title">
-      <div class="cover-wrap">
-        <div class="cover">
-          <img id="cover" alt="" width="600" height="600">
+      <div class="vinyl-wrapper">
+        <div class="vinyl">
+          <img id="cover-image" alt="" width="600" height="600">
+          <span class="vinyl-grooves"></span>
+          <span class="vinyl-hole"></span>
         </div>
+
         <button id="ned" class="ned" type="button" aria-controls="bubble" aria-expanded="false"
                 aria-label="Ask Ned about this album" disabled>
           <img src="images/ned.svg" alt="" width="120" height="144">
+          <span class="ned-greeting" aria-hidden="true">Hello, I'm Ned!<br>Click me to learn more about this era.</span>
         </button>
 
         <div id="bubble" class="bubble" hidden>
           <p class="bubble-text" aria-hidden="true">
-            <span id="bubble-full" class="bubble-full"></span>
-            <span id="bubble-typed"></span>
+            <span id="bubble-space-holder" class="bubble-space-holder"></span>
+            <span id="bubble-typed-text" class="bubble-typed-text"></span>
           </p>
           <div class="bubble-actions">
             <button id="bubble-close" class="bubble-button" type="button" aria-label="Close">✕</button>
@@ -44,7 +47,8 @@
           </div>
         </div>
       </div>
-      <p id="ned-says" class="visually-hidden" aria-live="polite"></p>
+      <p id="ned-line-for-screen-readers" class="visually-hidden" aria-live="polite"></p>
+
       <div class="album-info">
         <p id="album-year" class="album-year">—</p>
         <h2 id="album-title" class="album-title">Choose an era</h2>
@@ -69,13 +73,27 @@
         </button>
       </div>
       <p id="tracks-status" class="status" role="status"></p>
-      <ol id="track-list" class="track-list">
-      </ol>
+      <ol id="track-list" class="track-list"></ol>
     </section>
   </main>
 
   <footer class="site-footer">
     <p>Unofficial fan project for a university assignment. Album data, artwork and previews from the iTunes Search API.</p>
   </footer>
+
+  <template id="track-row-template">
+    <li class="track">
+      <button type="button" class="track-button">
+        <span class="track-icon" aria-hidden="true"></span>
+        <span>
+          <span class="track-name"></span>
+          <span class="track-album"></span>
+        </span>
+      </button>
+      <span class="track-time"></span>
+      <button type="button" class="favourite-button"></button>
+      <span class="track-progress"></span>
+    </li>
+  </template>
 </body>
 </html>

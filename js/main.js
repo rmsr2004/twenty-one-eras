@@ -4,11 +4,11 @@ import { showAlbum } from './tracks.js';
 import { setNedEra } from './ned.js';
 import { initVolume } from './volume.js';
 
-const themeColor = document.querySelector('meta[name="theme-color"]');
+const browserBarColor = document.querySelector('meta[name="theme-color"]');
 const eraList = document.querySelector('#era-list');
 const statusMessage = document.querySelector('#status');
-const vinyl = document.querySelector('.cover');
-const cover = document.querySelector('#cover');
+const vinyl = document.querySelector('.vinyl');
+const coverImage = document.querySelector('#cover-image');
 const albumYear = document.querySelector('#album-year');
 const albumTitle = document.querySelector('#album-title');
 const albumDescription = document.querySelector('#album-description');
@@ -36,27 +36,37 @@ function applyTheme(era) {
   document.body.style.setProperty('--bg', era.colors.background);
   document.body.style.setProperty('--text', era.colors.text);
   document.body.style.setProperty('--accent', era.colors.accent);
-  themeColor.content = era.colors.background;
+  browserBarColor.content = era.colors.background;
   document.title = `${era.name} · twenty one eras`;
+}
+
+function showCover(era) {
+  if (coverImage.src !== era.cover) {
+    coverImage.classList.add('is-loading');
+    coverImage.src = era.cover;
+  }
+  coverImage.alt = `Album cover of ${era.name}`;
+}
+
+function showAlbumInfo(era) {
+  albumYear.textContent = era.year;
+  albumTitle.textContent = era.name;
+  albumDescription.textContent = era.description;
+}
+
+function markSelectedEraButton(slug) {
+  for (const button of eraList.querySelectorAll('button')) {
+    button.setAttribute('aria-pressed', button.dataset.slug === slug);
+  }
 }
 
 function selectEra(slug) {
   const era = eras.find((e) => e.slug === slug);
 
   applyTheme(era);
-  if (cover.src !== era.cover) {
-    cover.classList.add('is-loading');
-    cover.src = era.cover;
-  }
-  cover.alt = `Album cover of ${era.name}`;
-  albumYear.textContent = era.year;
-  albumTitle.textContent = era.name;
-  albumDescription.textContent = era.description;
-
-  for (const button of eraList.querySelectorAll('button')) {
-    button.setAttribute('aria-pressed', button.dataset.slug === slug);
-  }
-
+  showCover(era);
+  showAlbumInfo(era);
+  markSelectedEraButton(slug);
   showAlbum(era);
   setNedEra(era);
 }
@@ -68,10 +78,23 @@ eraList.addEventListener('click', (event) => {
   }
 });
 
-cover.addEventListener('load', () => cover.classList.remove('is-loading'));
-cover.addEventListener('error', () => cover.classList.remove('is-loading'));
+function revealCover() {
+  coverImage.classList.remove('is-loading');
+}
+
+coverImage.addEventListener('load', revealCover);
+coverImage.addEventListener('error', revealCover);
 
 player.onUpdate(({ playing }) => vinyl.classList.toggle('is-spinning', playing));
+
+function erasWithCovers(eraData, albums) {
+  return eraData
+    .map((era) => {
+      const album = albums.find((a) => a.id === era.id);
+      return album ? { ...era, cover: album.cover } : null;
+    })
+    .filter(Boolean);
+}
 
 async function init() {
   initVolume();
@@ -79,16 +102,11 @@ async function init() {
 
   try {
     const [eraData, albums] = await Promise.all([getEras(), getAlbums()]);
-
-    eras = eraData
-      .map((era) => {
-        const album = albums.find((a) => a.id === era.id);
-        return album ? { ...era, cover: album.cover } : null;
-      })
-      .filter(Boolean);
+    eras = erasWithCovers(eraData, albums);
 
     renderEraButtons();
-    selectEra(eras[eras.length - 1].slug);
+    const newestEra = eras.at(-1);
+    selectEra(newestEra.slug);
     statusMessage.textContent = '';
   } catch (error) {
     console.error(error);

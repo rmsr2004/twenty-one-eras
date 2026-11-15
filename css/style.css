@@ -2,14 +2,13 @@ body {
   --bg: #111111;
   --text: #f2f2f2;
   --accent: #e5e5e5;
-
   --muted: color-mix(in srgb, var(--text) 75%, var(--bg));
   --line: color-mix(in srgb, var(--text) 18%, var(--bg));
 
   --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --gap: 1.5rem;
-  --tap: 2.75rem;
-  --fade: 0.6s ease;
+  --min-touch-size: 2.75rem;
+  --theme-fade: 0.6s ease;
 }
 
 *,
@@ -25,7 +24,7 @@ body {
   line-height: 1.5;
   background: var(--bg);
   color: var(--text);
-  transition: background-color var(--fade), color var(--fade);
+  transition: background-color var(--theme-fade), color var(--theme-fade);
 }
 
 .logo span,
@@ -38,13 +37,17 @@ body {
 .album-year,
 .album-description,
 .volume,
+.vinyl-hole,
 .section-title,
 .track,
 .track-icon,
 .track-name,
 .track-time,
 .site-footer {
-  transition: color var(--fade), background-color var(--fade), border-color var(--fade);
+  transition:
+    color var(--theme-fade),
+    background-color var(--theme-fade),
+    border-color var(--theme-fade);
 }
 
 img {
@@ -85,6 +88,15 @@ button {
   top: 1rem;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .status {
   margin: 0;
   color: var(--muted);
@@ -96,7 +108,7 @@ button {
 
 .era-button,
 .view-toggle {
-  min-height: var(--tap);
+  min-height: var(--min-touch-size);
   padding: 0.5rem 1rem;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -154,12 +166,12 @@ button {
   text-align: center;
 }
 
-.cover-wrap {
+.vinyl-wrapper {
   position: relative;
   width: min(100%, 20rem);
 }
 
-.cover {
+.vinyl {
   position: relative;
   width: 100%;
   aspect-ratio: 1;
@@ -167,11 +179,10 @@ button {
   background: var(--line);
   overflow: hidden;
   box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.35);
-  animation: spin 12s linear infinite;
-  animation-play-state: paused;
+  animation: spin 12s linear infinite paused;
 }
 
-.cover.is-spinning {
+.vinyl.is-spinning {
   animation-play-state: running;
 }
 
@@ -181,24 +192,21 @@ button {
   }
 }
 
-.cover img {
+.vinyl img {
   transition: opacity 0.4s ease;
 }
 
-.cover img.is-loading {
+.vinyl img.is-loading {
   opacity: 0;
 }
 
-.cover::before {
-  content: "";
+.vinyl-grooves {
   position: absolute;
   inset: 0;
-  border-radius: 50%;
   background: repeating-radial-gradient(circle, transparent 0 3px, rgb(0 0 0 / 0.07) 3px 4px);
 }
 
-.cover::after {
-  content: "";
+.vinyl-hole {
   position: absolute;
   inset: 0;
   width: 12%;
@@ -207,7 +215,6 @@ button {
   border-radius: 50%;
   background: var(--bg);
   box-shadow: 0 0 0 0.5rem rgb(0 0 0 / 0.25);
-  transition: background-color var(--fade);
 }
 
 .ned {
@@ -221,6 +228,12 @@ button {
   background: none;
   animation: float 3s ease-in-out infinite;
   transition: transform 0.2s ease;
+}
+
+@keyframes float {
+  50% {
+    translate: 0 -0.4rem;
+  }
 }
 
 .ned img {
@@ -237,16 +250,8 @@ button {
   cursor: default;
 }
 
-.ned::before,
-.ned::after {
+.ned-greeting {
   position: absolute;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-}
-
-.ned::before {
-  content: "Hello, I'm Ned!\A Click me to learn more about this era.";
   bottom: calc(100% + 0.6rem);
   right: 0;
   padding: 0.4rem 0.75rem;
@@ -257,36 +262,103 @@ button {
   font-weight: 700;
   line-height: 1.4;
   text-align: left;
-  white-space: pre;
+  white-space: nowrap;
   box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
 }
 
-.ned::after {
+.ned-greeting::after {
   content: "";
-  bottom: calc(100% + 0.6rem - 0.5rem);
-  right: 30%;
+  position: absolute;
+  right: 2rem;
+  bottom: -0.5rem;
   border: 0.5rem solid transparent;
   border-top-color: var(--text);
   border-bottom: 0;
 }
 
-.ned:hover::before,
-.ned:hover::after,
-.ned:focus-visible::before,
-.ned:focus-visible::after {
+.ned:hover .ned-greeting,
+.ned:focus-visible .ned-greeting {
   opacity: 1;
 }
 
-.ned[aria-expanded="true"]::before,
-.ned[aria-expanded="true"]::after,
-.ned:disabled::before,
-.ned:disabled::after {
+.ned[aria-expanded="true"] .ned-greeting,
+.ned:disabled .ned-greeting {
   display: none;
 }
 
-@keyframes float {
+.bubble {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 36%;
+  width: min(100%, 22rem);
+  padding: 1rem 1.25rem 0.5rem;
+  border-radius: 1rem;
+  background: var(--text);
+  color: var(--bg);
+  box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 0.35);
+  text-align: left;
+  cursor: pointer;
+  transform-origin: bottom right;
+  animation: pop-in 0.2s ease;
+}
+
+.bubble::after {
+  content: "";
+  position: absolute;
+  right: 12%;
+  bottom: -0.7rem;
+  border: 0.75rem solid transparent;
+  border-top-color: var(--text);
+  border-bottom: 0;
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+.bubble-text {
+  display: grid;
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.bubble-space-holder,
+.bubble-typed-text {
+  grid-area: 1 / 1;
+}
+
+.bubble-space-holder {
+  visibility: hidden;
+}
+
+.bubble-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.bubble-button {
+  width: var(--min-touch-size);
+  height: var(--min-touch-size);
+  border: 0;
+  background: none;
+  font-size: 0.9rem;
+}
+
+.bubble.is-line-complete .bubble-next {
+  animation: blink 1s steps(2) infinite;
+}
+
+@keyframes blink {
   50% {
-    translate: 0 -0.4rem;
+    opacity: 0;
   }
 }
 
@@ -370,7 +442,7 @@ button {
   gap: 0.75rem;
   border-bottom: 1px solid var(--line);
   animation: slide-in 0.4s ease both;
-  animation-delay: calc(var(--i, 0) * 40ms);
+  animation-delay: calc(var(--row-index, 0) * 40ms);
 }
 
 @keyframes slide-in {
@@ -380,8 +452,7 @@ button {
   }
 }
 
-.track::after {
-  content: "";
+.track-progress {
   position: absolute;
   left: 0;
   right: 0;
@@ -390,7 +461,7 @@ button {
   background: var(--accent);
   transform: scaleX(var(--progress, 0));
   transform-origin: left;
-  transition: transform 0.25s linear, background-color var(--fade);
+  transition: transform 0.25s linear, background-color var(--theme-fade);
 }
 
 .track-button {
@@ -437,8 +508,8 @@ button {
 
 .favourite-button {
   flex-shrink: 0;
-  width: var(--tap);
-  height: var(--tap);
+  width: var(--min-touch-size);
+  height: var(--min-touch-size);
   border: 0;
   border-radius: 50%;
   background: none;
@@ -453,88 +524,6 @@ button {
 
 .favourite-button[aria-pressed="true"] {
   color: var(--accent);
-}
-
-.bubble {
-  position: absolute;
-  z-index: 2;
-  right: 0;
-  bottom: 36%;
-  width: min(100%, 22rem);
-  padding: 1rem 1.25rem 0.5rem;
-  border-radius: 1rem;
-  background: var(--text);
-  color: var(--bg);
-  box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 0.35);
-  text-align: left;
-  cursor: pointer;
-  transform-origin: bottom right;
-  animation: pop-in 0.2s ease;
-}
-
-.bubble::after {
-  content: "";
-  position: absolute;
-  right: 12%;
-  bottom: -0.7rem;
-  border: 0.75rem solid transparent;
-  border-top-color: var(--text);
-  border-bottom: 0;
-}
-
-@keyframes pop-in {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-}
-
-.bubble-text {
-  display: grid;
-  margin: 0;
-  font-weight: 600;
-  line-height: 1.5;
-}
-
-.bubble-text > span {
-  grid-area: 1 / 1;
-}
-
-.bubble-full {
-  visibility: hidden;
-}
-
-.bubble-actions {
-  display: flex;
-  justify-content: space-between;
-}
-
-.bubble-button {
-  width: var(--tap);
-  height: var(--tap);
-  border: 0;
-  background: none;
-  color: inherit;
-  font-size: 0.9rem;
-}
-
-.bubble.is-done .bubble-next {
-  animation: blink 1s steps(2) infinite;
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
 }
 
 .site-footer {
@@ -563,7 +552,7 @@ button {
     text-align: left;
   }
 
-  .cover-wrap {
+  .vinyl-wrapper {
     width: 100%;
   }
 

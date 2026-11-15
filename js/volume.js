@@ -11,7 +11,7 @@ function setVolume(percent) {
 
 function initVolume() {
   try {
-    volumeInput.value = localStorage.getItem(STORAGE_KEY) ?? 80;
+    volumeInput.value = localStorage.getItem(STORAGE_KEY) ?? 10;
   } catch {
   }
   setVolume(volumeInput.value);

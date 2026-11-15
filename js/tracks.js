@@ -14,7 +14,7 @@ let showingFavourites = false;
 
 favouritesCount.textContent = getFavourites().length;
 
-export function showAlbum(era) {
+function showAlbum(era) {
   currentEra = era;
   showList(false);
 }
@@ -135,3 +135,5 @@ player.onEnded((id) => {
     player.toggle(next);
   }
 });
+
+export { showAlbum };

@@ -19,7 +19,7 @@ async function getJSON(url) {
   return data;
 }
 
-export async function getEras() {
+async function getEras() {
   const response = await fetch('data/eras.json');
   if (!response.ok) {
     throw new Error(`Could not load eras.json (${response.status})`);
@@ -27,7 +27,7 @@ export async function getEras() {
   return response.json();
 }
 
-export async function getTracks(albumId) {
+async function getTracks(albumId) {
   const data = await getJSON(`${BASE_URL}/lookup?id=${albumId}&entity=song`);
 
   return data.results
@@ -43,7 +43,7 @@ export async function getTracks(albumId) {
     .sort((a, b) => a.number - b.number);
 }
 
-export async function getAlbums() {
+async function getAlbums() {
   const data = await getJSON(`${BASE_URL}/lookup?id=${ARTIST_ID}&entity=album&limit=200`);
   const seenNames = new Set();
 
@@ -64,3 +64,5 @@ export async function getAlbums() {
     }))
     .sort((a, b) => a.year - b.year);
 }
+
+export { getEras, getTracks, getAlbums };

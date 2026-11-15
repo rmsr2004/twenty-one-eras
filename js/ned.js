@@ -12,7 +12,7 @@ let lines = [];
 let lineIndex = 0;
 let typingTimer = null;
 
-export function setNedEra(era) {
+function setNedEra(era) {
   closeBubble();
   lines = era.story;
   ned.setAttribute('aria-label', `Ask Ned about ${era.name}`);
@@ -104,3 +104,5 @@ document.addEventListener('keydown', (event) => {
     closeBubble();
   }
 });
+
+export { setNedEra };

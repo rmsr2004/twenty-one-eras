@@ -10,15 +10,15 @@ function load() {
 
 let favourites = load();
 
-export function getFavourites() {
+function getFavourites() {
   return [...favourites];
 }
 
-export function isFavourite(track) {
+function isFavourite(track) {
   return favourites.some((f) => f.id === track.id);
 }
 
-export function toggleFavourite(track) {
+function toggleFavourite(track) {
   if (isFavourite(track)) {
     favourites = favourites.filter((f) => f.id !== track.id);
   } else {
@@ -26,3 +26,5 @@ export function toggleFavourite(track) {
   }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(favourites));
 }
+
+export { getFavourites, isFavourite, toggleFavourite };

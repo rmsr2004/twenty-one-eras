@@ -1,7 +1,7 @@
 const audio = new Audio();
 let currentId = null;
 
-export function toggle(track) {
+function toggle(track) {
   if (track.id === currentId) {
     if (audio.paused) {
       play();
@@ -16,11 +16,11 @@ export function toggle(track) {
   play();
 }
 
-export function setVolume(value) {
+function setVolume(value) {
   audio.volume = value;
 }
 
-export function stop() {
+function stop() {
   currentId = null;
   audio.pause();
 }
@@ -29,11 +29,11 @@ function play() {
   audio.play().catch((error) => console.warn('Preview could not play:', error.message));
 }
 
-export function onEnded(callback) {
+function onEnded(callback) {
   audio.addEventListener('ended', () => callback(currentId));
 }
 
-export function onUpdate(callback) {
+function onUpdate(callback) {
   for (const type of ['play', 'pause', 'ended', 'timeupdate']) {
     audio.addEventListener(type, () => {
       callback({
@@ -44,3 +44,5 @@ export function onUpdate(callback) {
     });
   }
 }
+
+export { toggle, setVolume, stop, onEnded, onUpdate };

@@ -1,4 +1,5 @@
 const MS_PER_LETTER = 30;
+const GREETING = "Hello, I'm Ned! Let me tell you about this era.";
 
 const ned = document.querySelector('#ned');
 const bubble = document.querySelector('#bubble');
@@ -7,6 +8,7 @@ const bubbleTypedText = document.querySelector('#bubble-typed-text');
 const nextButton = document.querySelector('#bubble-next');
 const lineForScreenReaders = document.querySelector('#ned-line-for-screen-readers');
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const cannotHover = window.matchMedia('(hover: none)');
 
 let storyLines = [];
 let lineIndex = 0;
@@ -14,7 +16,8 @@ let typingTimer = null;
 
 function setNedEra(era) {
   closeBubble();
-  storyLines = era.story;
+  // Without hover (touch screens) the greeting tooltip is never seen, so Ned says it first.
+  storyLines = cannotHover.matches ? [GREETING, ...era.story] : era.story;
   ned.setAttribute('aria-label', `Ask Ned about ${era.name}`);
   ned.disabled = false;
 }

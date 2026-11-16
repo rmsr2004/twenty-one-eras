@@ -20,6 +20,7 @@ favouritesCount.textContent = getFavourites().length;
 
 function showAlbum(era) {
   currentEra = era;
+  player.stop();
   showAlbumTracks();
 }
 
@@ -31,7 +32,6 @@ function updateViewHeader() {
 function showAlbumTracks() {
   showingFavourites = false;
   updateViewHeader();
-  player.stop();
 
   if (currentEra) {
     loadTracks(currentEra);
@@ -41,7 +41,6 @@ function showAlbumTracks() {
 function showFavourites() {
   showingFavourites = true;
   updateViewHeader();
-  player.stop();
 
   visibleTracks = getFavourites();
   renderTracks();

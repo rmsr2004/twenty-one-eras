@@ -63,9 +63,3 @@ docker compose up --build
 
 Then open <http://localhost:8000>, and stop it with `Ctrl+C` (or `docker compose down`).
 Without Compose: `docker build -t twenty-one-eras .` and `docker run --rm -p 8000:8000 twenty-one-eras`.
-
-## Notes
-
-- Ned's stories are our own short summaries of each album's themes, including common fan interpretations.
-- No song lyrics are included, and album artwork is loaded from the API, not stored in this repository.
-- Unofficial fan project, not affiliated with the band or their label.

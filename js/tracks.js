@@ -130,8 +130,13 @@ trackList.addEventListener('click', (event) => {
 
   if (event.target.closest('.favourite-button')) {
     toggleFavourite(track);
-    updateFavouriteButton(row.querySelector('.favourite-button'), track);
     favouritesCount.textContent = getFavourites().length;
+    if (showingFavourites) {
+      visibleTracks = getFavourites();
+      renderTracks();
+    } else {
+      updateFavouriteButton(row.querySelector('.favourite-button'), track);
+    }
   } else if (event.target.closest('.track-button')) {
     player.toggle(track);
   }

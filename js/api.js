@@ -15,7 +15,11 @@ async function fetchJSONOncePerSession(url) {
   }
 
   const data = await response.json();
-  sessionStorage.setItem(url, JSON.stringify(data));
+  try {
+    sessionStorage.setItem(url, JSON.stringify(data));
+  } catch (error) {
+    console.warn('Response could not be cached:', error.message);
+  }
   return data;
 }
 

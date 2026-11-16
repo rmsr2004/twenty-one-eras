@@ -80,7 +80,7 @@ function selectEra(slug) {
 
 eraList.addEventListener('click', (event) => {
   const button = event.target.closest('button');
-  if (button) {
+  if (button && button.dataset.slug !== document.body.dataset.era) {
     selectEra(button.dataset.slug);
   }
 });

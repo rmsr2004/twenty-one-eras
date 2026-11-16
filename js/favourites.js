@@ -24,7 +24,11 @@ function toggleFavourite(track) {
   } else {
     favourites.push(track);
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(favourites));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(favourites));
+  } catch (error) {
+    console.warn('Favourites could not be saved:', error.message);
+  }
 }
 
 export { getFavourites, isFavourite, toggleFavourite };

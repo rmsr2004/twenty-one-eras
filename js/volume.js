@@ -28,7 +28,11 @@ function initVolume() {
 
   volumeInput.addEventListener('input', () => {
     setVolume(volumeInput.value);
-    localStorage.setItem(STORAGE_KEY, volumeInput.value);
+    try {
+      localStorage.setItem(STORAGE_KEY, volumeInput.value);
+    } catch (error) {
+      console.warn('Volume could not be saved:', error.message);
+    }
   });
 }
 

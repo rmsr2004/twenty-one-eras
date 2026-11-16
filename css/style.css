@@ -160,7 +160,9 @@ button {
 }
 
 .album {
+  container-type: inline-size;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--gap);
   justify-items: center;
   text-align: center;
@@ -398,7 +400,7 @@ button {
 }
 
 .album-title {
-  font-size: clamp(2.25rem, 10vw, 4.5rem);
+  font-size: clamp(2.25rem, 12cqi, 6rem);
   font-weight: 900;
   text-transform: uppercase;
 }
@@ -582,10 +584,6 @@ button {
 
   .vinyl-wrapper {
     width: 100%;
-  }
-
-  .album-title {
-    font-size: clamp(2.25rem, 5vw, 6rem);
   }
 
   .album-description {
